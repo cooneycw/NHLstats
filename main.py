@@ -1,10 +1,12 @@
-from src_code.data_collect.collect_01 import get_game_data
+from config.config import Config
+from src_code.data_collect.collect_01 import get_season_data, get_team_list
 
 
 def main():
-    get_game_data()
+    config = Config()
+    get_season_data(config)
+    get_team_list(config)
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     main()
