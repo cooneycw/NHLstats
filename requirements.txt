@@ -1,0 +1,15 @@
+aiohttp @ file:///croot/aiohttp_1707342283163/work
+aiosignal @ file:///tmp/build/80754af9/aiosignal_1637843061372/work
+attrs @ file:///work/perseverance-python-buildout/croot/attrs_1698845858439/work
+Brotli @ file:///work/perseverance-python-buildout/croot/brotli-split_1698805593785/work
+certifi @ file:///croot/certifi_1707229174982/work/certifi
+charset-normalizer @ file:///tmp/build/80754af9/charset-normalizer_1630003229654/work
+datatable==1.1.0
+numpy==1.26.4
+pandas==2.2.1
+python-dateutil==2.8.2
+pytz==2024.1
+setuptools==68.2.2
+six==1.16.0
+tzdata==2024.1
+wheel==0.41.2
