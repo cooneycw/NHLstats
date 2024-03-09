@@ -11,8 +11,19 @@ def curate_basic_stats(config, curr_date):
     team = []
     opp = []
     home = []
-    team_score = []
-    opp_score = []
+    t_score = []
+    o_score = []
+    t_sog = []
+    o_sog = []
+    t_hits = []
+    o_hits = []
+    t_blocks = []
+    o_blocks = []
+    t_pim = []
+    o_pim = []
+    t_face = []
+    o_face = []
+
     ot = []
     shootout = []
     non_shootout_win = []
@@ -28,18 +39,50 @@ def curate_basic_stats(config, curr_date):
         if game[4]["homeTeam"]["abbrev"] == game[1]:
             home.append(1)
             opp.append(game[4]["awayTeam"]["abbrev"])
-            team_s = game[4]["homeTeam"]["score"]
-            opp_s = game[4]["awayTeam"]["score"]
+            team_score = game[4]["homeTeam"]["score"]
+            opp_score = game[4]["awayTeam"]["score"]
+            for category in game[4]['boxscore']['teamGameStats']:
+                if category['category'] == 'sog':
+                    team_sog = category['homeValue']
+                    opp_sog = category['awayValue']
+                elif category['category'] == 'hits':
+                    team_hits = category['homeValue']
+                    opp_hits = category['awayValue']
+                elif category['category'] == 'blockedShots':
+                    team_blocks = category['homeValue']
+                    opp_blocks = category['awayValue']
+                elif category['category'] == 'pim':
+                    team_pim = category['homeValue']
+                    opp_pim = category['awayValue']
+                elif category['category'] == 'faceoffWinningPctg':
+                    team_face = category['homeValue']
+                    opp_face = category['awayValue']
         else:
             home.append(0)
             opp.append(game[4]["homeTeam"]["abbrev"])
-            team_s = game[4]["awayTeam"]["score"]
-            opp_s = game[4]["homeTeam"]["score"]
+            team_score = game[4]["awayTeam"]["score"]
+            opp_score = game[4]["homeTeam"]["score"]
+            for category in game[4]['boxscore']['teamGameStats']:
+                if category['category'] == 'sog':
+                    team_sog = category['awayValue']
+                    opp_sog = category['teamValue']
+                elif category['category'] == 'hits':
+                    team_hits = category['awayValue']
+                    opp_hits = category['teamValue']
+                elif category['category'] == 'blockedShots':
+                    team_blocks = category['awayValue']
+                    opp_blocks = category['teamValue']
+                elif category['category'] == 'pim':
+                    team_pim = category['awayValue']
+                    opp_pim = category['teamValue']
+                elif category['category'] == 'faceoffWinningPctg':
+                    team_face = category['awayValue']
+                    opp_face = category['teamValue']
         if game[4]["gameOutcome"]["lastPeriodType"] == "REG":
             ot.append(0)
             shootout.append(0)
             shootout_win.append(0)
-            if team_s > opp_s:
+            if team_score > opp_score:
                 non_shootout_win.append(1)
             else:
                 non_shootout_win.append(0)
@@ -47,22 +90,32 @@ def curate_basic_stats(config, curr_date):
             ot.append(0)
             shootout.append(1)
             non_shootout_win.append(0)
-            if team_s > opp_s:
+            if team_score > opp_score:
                 shootout_win.append(1)
-                team_s = team_s - 1
+                team_score = team_score - 1
             else:
                 shootout_win.append(0)
-                opp_s = opp_s - 1
+                opp_score = opp_score - 1
         elif game[4]["gameOutcome"]["lastPeriodType"] == "OT":
             ot.append(1)
             shootout.append(0)
             shootout_win.append(0)
-            if team_s > opp_s:
+            if team_score > opp_score:
                 non_shootout_win.append(1)
             else:
                 non_shootout_win.append(0)
-        team_score.append(team_s)
-        opp_score.append(opp_s)
+        t_score.append(team_score)
+        o_score.append(opp_score)
+        t_sog.append(team_sog)
+        o_sog.append(opp_sog)
+        t_hits.append(team_hits)
+        o_hits.append(opp_hits)
+        t_blocks.append(team_blocks)
+        o_blocks.append(opp_blocks)
+        t_pim.append(team_pim)
+        o_pim.append(opp_pim)
+        t_face.append(team_face)
+        o_face.append(opp_face)
 
     df = pd.DataFrame({
         "season": season,
@@ -73,8 +126,18 @@ def curate_basic_stats(config, curr_date):
         "home": home,
         "ot": ot,
         "shootout": shootout,
-        "team_score": team_score,
-        "opp_score": opp_score,
+        "team_score": t_score,
+        "opp_score": o_score,
+        "team_sog": t_sog,
+        "opp_sog": o_sog,
+        "team_hits": t_hits,
+        "opp_hits": o_hits,
+        "team_blocks": t_blocks,
+        "opp_blocks": o_blocks,
+        "team_pim": t_pim,
+        "opp_pim": o_pim,
+        "team_face": t_face,
+        "opp_face": o_face,
         "shootout_win": shootout_win,
         "non_shootout_win": non_shootout_win,
     })
@@ -122,8 +185,18 @@ def curate_future_games(config, curr_date):
     team = []
     opp = []
     home = []
-    team_score = []
-    opp_score = []
+    t_score = []
+    o_score = []
+    t_sog = []
+    o_sog = []
+    t_hits = []
+    o_hits = []
+    t_blocks = []
+    o_blocks = []
+    t_pim = []
+    o_pim = []
+    t_face = []
+    o_face = []
     ot = []
     shootout = []
     non_shootout_win = []
@@ -143,20 +216,60 @@ def curate_future_games(config, curr_date):
             home.append(1)
             opp.append(game[4]["awayTeam"]["abbrev"])
             if future_game == 1:
-                team_s = None
-                opp_s = None
+                team_score = None
+                opp_score = None
+                team_sog = None
+                opp_sog = None
+                team_hits = None
+                opp_hits = None
+                team_blocks = None
+                opp_blocks = None
+                team_pim = None
+                opp_pim = None
+                team_face = None
+                opp_face = None
             else:
-                team_s = game[4]["homeTeam"]["score"]
-                opp_s = game[4]["awayTeam"]["score"]
+                team_score = game[4]["homeTeam"]["score"]
+                opp_score = game[4]["awayTeam"]["score"]
+                team_sog = game[4]["homeTeam"]["sog"]
+                opp_sog = game[4]["awayTeam"]["sog"]
+                team_hits = game[4]["homeTeam"]["hits"]
+                opp_hits = game[4]["awayTeam"]["hits"]
+                team_blocks = game[4]["homeTeam"]["blocks"]
+                opp_blocks = game[4]["awayTeam"]["blocks"]
+                team_pim = game[4]["homeTeam"]["pim"]
+                opp_pim = game[4]["awayTeam"]["pim"]
+                team_face = game[4]["homeTeam"]["faceoffWinningPctg"]
+                opp_face = game[4]["awayTeam"]["faceoffWinningPctg"]
         else:
             home.append(0)
             opp.append(game[4]["homeTeam"]["abbrev"])
             if future_game == 1:
-                team_s = None
-                opp_s = None
+                team_score = None
+                opp_score = None
+                team_sog = None
+                opp_sog = None
+                team_hits = None
+                opp_hits = None
+                team_blocks = None
+                opp_blocks = None
+                team_pim = None
+                opp_pim = None
+                team_face = None
+                opp_face = None
             else:
-                team_s = game[4]["awayTeam"]["score"]
-                opp_s = game[4]["homeTeam"]["score"]
+                team_score = game[4]["awayTeam"]["score"]
+                opp_score = game[4]["homeTeam"]["score"]
+                team_sog = game[4]["homeTeam"]["sog"]
+                opp_sog = game[4]["awayTeam"]["sog"]
+                team_hits = game[4]["homeTeam"]["hits"]
+                opp_hits = game[4]["awayTeam"]["hits"]
+                team_blocks = game[4]["homeTeam"]["blocks"]
+                opp_blocks = game[4]["awayTeam"]["blocks"]
+                team_pim = game[4]["homeTeam"]["pim"]
+                opp_pim = game[4]["awayTeam"]["pim"]
+                team_face = game[4]["homeTeam"]["faceoffWinningPctg"]
+                opp_face = game[4]["awayTeam"]["faceoffWinningPctg"]
         if future_game == 1:
             ot.append(None)
             shootout.append(None)
@@ -166,7 +279,7 @@ def curate_future_games(config, curr_date):
             ot.append(0)
             shootout.append(0)
             shootout_win.append(0)
-            if team_s > opp_s:
+            if team_score > opp_score:
                 non_shootout_win.append(1)
             else:
                 non_shootout_win.append(0)
@@ -174,22 +287,32 @@ def curate_future_games(config, curr_date):
             ot.append(0)
             shootout.append(1)
             non_shootout_win.append(0)
-            if team_s > opp_s:
+            if team_score > opp_score:
                 shootout_win.append(1)
-                team_s = team_s - 1
+                team_score = team_score - 1
             else:
                 shootout_win.append(0)
-                opp_s = opp_s - 1
+                opp_score = opp_score - 1
         elif game[4]["gameOutcome"]["lastPeriodType"] == "OT":
             ot.append(1)
             shootout.append(0)
             shootout_win.append(0)
-            if team_s > opp_s:
+            if team_score > opp_score:
                 non_shootout_win.append(1)
             else:
                 non_shootout_win.append(0)
-        team_score.append(team_s)
-        opp_score.append(opp_s)
+        t_score.append(team_score)
+        o_score.append(opp_score)
+        t_sog.append(team_sog)
+        o_sog.append(opp_sog)
+        t_hits.append(team_hits)
+        o_hits.append(opp_hits)
+        t_blocks.append(team_blocks)
+        o_blocks.append(opp_blocks)
+        t_pim.append(team_pim)
+        o_pim.append(opp_pim)
+        t_face.append(team_face)
+        o_face.append(opp_face)
 
     df = pd.DataFrame({
         "season": season,
@@ -201,8 +324,18 @@ def curate_future_games(config, curr_date):
         "home": home,
         "ot": ot,
         "shootout": shootout,
-        "team_score": team_score,
-        "opp_score": opp_score,
+        "team_score": t_score,
+        "opp_score": o_score,
+        "team_sog": t_sog,
+        "opp_sog": o_sog,
+        "team_hits": t_hits,
+        "opp_hits": o_hits,
+        "team_blocks": t_blocks,
+        "opp_blocks": o_blocks,
+        "team_pim": t_pim,
+        "opp_pim": o_pim,
+        "team_face": t_face,
+        "opp_face": o_face,
         "shootout_win": shootout_win,
         "non_shootout_win": non_shootout_win,
     })

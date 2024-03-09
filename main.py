@@ -4,18 +4,19 @@ from config.config import Config
 from src_code.data_collect.collect_01 import get_season_data, get_team_list, get_game_list, get_boxscore_list
 from src_code.data_curate.curate_01 import curate_basic_stats, curate_future_games
 from src_code.data_curate.curate_02 import curate_rolling_stats, curate_proj_data
-from src_code.data_analysis.analysis_01 import perform_poison, perform_tf
+from src_code.data_analysis.analysis_01 import perform_tf
+from src_code.data_analysis.analysis_02 import start_h2o
 from src_code.utils.utils import save_data, load_data
 
 
 def main():
-    days_list = [6, 12, 18, 24, 40]
-    seasons = 8
+    days_list = [20]
+    seasons = 5
     curr_date = datetime.now().date()
     get_data(seasons)
     curate_data(curr_date, days_list)
-    # perform_poison()
     perform_tf()
+    # start_h2o()
 
 
 def get_data(seasons):
