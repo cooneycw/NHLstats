@@ -15,6 +15,8 @@ def curate_rolling_stats(config, curr_date, days):
     team_goals_against = []
     team_shots_for = []
     team_shots_against = []
+    team_pp_for = []
+    team_pp_against = []
     team_pim_for = []
     team_pim_against = []
     team_blocks_for = []
@@ -28,6 +30,12 @@ def curate_rolling_stats(config, curr_date, days):
     avg_goals_against = []
     avg_shots_for = []
     avg_shots_against = []
+    avg_pp_for = []
+    avg_pp_against = []
+    avg_give_for = []
+    avg_give_against = []
+    avg_take_for = []
+    avg_take_against = []
     avg_pim_for = []
     avg_pim_against = []
     avg_blocks_for = []
@@ -43,6 +51,12 @@ def curate_rolling_stats(config, curr_date, days):
             team_goals_against = []
             team_shots_for = []
             team_shots_against = []
+            team_pp_for = []
+            team_pp_against = []
+            team_give_for = []
+            team_give_against = []
+            team_take_for = []
+            team_take_against = []
             team_pim_for = []
             team_pim_against = []
             team_blocks_for = []
@@ -56,6 +70,14 @@ def curate_rolling_stats(config, curr_date, days):
         team_goals_against.append(row['opp_score'])
         team_shots_for.append(row['team_sog'])
         team_shots_against.append(row['opp_sog'])
+        team_pp_for.append(row['team_pp'])
+        team_pp_against.append(row['opp_pp'])
+        team_give_for.append(row['team_give'])
+        team_give_against.append(row['opp_give'])
+        team_take_for.append(row['team_take'])
+        team_take_against.append(row['opp_take'])
+
+
         team_pim_for.append(row['team_pim'])
         team_pim_against.append(row['opp_pim'])
         team_blocks_for.append(row['team_blocks'])
@@ -73,6 +95,12 @@ def curate_rolling_stats(config, curr_date, days):
             avg_goals_against.append(sum(team_goals_against) / len(team_goals_against))
             avg_shots_for.append(sum(team_shots_for) / len(team_shots_for))
             avg_shots_against.append(sum(team_shots_against) / len(team_shots_against))
+            avg_pp_for.append(sum(team_pp_for) / len(team_pp_for))
+            avg_pp_against.append(sum(team_pp_against) / len(team_pp_against))
+            avg_give_for.append(sum(team_give_for) / len(team_give_for))
+            avg_give_against.append(sum(team_give_against) / len(team_give_against))
+            avg_take_for.append(sum(team_take_for) / len(team_take_for))
+            avg_take_against.append(sum(team_take_against) / len(team_take_against))
             avg_pim_for.append(sum(team_pim_for) / len(team_pim_for))
             avg_pim_against.append(sum(team_pim_against) / len(team_pim_against))
             avg_blocks_for.append(sum(team_blocks_for) / len(team_blocks_for))
@@ -87,6 +115,12 @@ def curate_rolling_stats(config, curr_date, days):
             team_goals_against.pop(0)
             team_shots_for.pop(0)
             team_shots_against.pop(0)
+            team_pp_for.pop(0)
+            team_pp_against.pop(0)
+            team_give_for.pop(0)
+            team_give_against.pop(0)
+            team_take_for.pop(0)
+            team_take_against.pop(0)
             team_pim_for.pop(0)
             team_pim_against.pop(0)
             team_blocks_for.pop(0)
@@ -106,6 +140,12 @@ def curate_rolling_stats(config, curr_date, days):
         f"team_avg_goals_against_{days}": avg_goals_against,
         f"team_avg_shots_for_{days}": avg_shots_for,
         f"team_avg_shots_against_{days}": avg_shots_against,
+        f"team_avg_pp_for_{days}": avg_pp_for,
+        f"team_avg_pp_against_{days}": avg_pp_against,
+        f"team_avg_give_for_{days}": avg_give_for,
+        f"team_avg_give_against_{days}": avg_give_against,
+        f"team_avg_take_for_{days}": avg_take_for,
+        f"team_avg_take_against_{days}": avg_take_against,
         f"team_avg_pim_for_{days}": avg_pim_for,
         f"team_avg_pim_against_{days}": avg_pim_against,
         f"team_avg_blocks_for_{days}": avg_blocks_for,
@@ -124,6 +164,13 @@ def curate_rolling_stats(config, curr_date, days):
         f"opp_avg_goals_against_{days}": avg_goals_against,
         f"opp_avg_shots_for_{days}": avg_shots_for,
         f"opp_avg_shots_against_{days}": avg_shots_against,
+        f"opp_avg_pp_for_{days}": avg_pp_for,
+        f"opp_avg_pp_against_{days}": avg_pp_against,
+        f"opp_avg_give_for_{days}": avg_give_for,
+        f"opp_avg_give_against_{days}": avg_give_against,
+        f"opp_avg_take_for_{days}": avg_take_for,
+        f"opp_avg_take_against_{days}": avg_take_against,
+
         f"opp_avg_pim_for_{days}": avg_pim_for,
         f"opp_avg_pim_against_{days}": avg_pim_against,
         f"opp_avg_blocks_for_{days}": avg_blocks_for,

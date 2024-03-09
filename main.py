@@ -10,7 +10,7 @@ from src_code.utils.utils import save_data, load_data
 
 
 def main():
-    days_list = [5, 12, 20]
+    days_list = [10, 20, 40]
     seasons = 5
     curr_date = datetime.now().date()
     # get_data(seasons)

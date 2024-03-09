@@ -15,6 +15,12 @@ def curate_basic_stats(config, curr_date):
     o_score = []
     t_sog = []
     o_sog = []
+    t_pp = []
+    o_pp = []
+    t_give = []
+    o_give = []
+    t_take = []
+    o_take = []
     t_hits = []
     o_hits = []
     t_blocks = []
@@ -45,6 +51,15 @@ def curate_basic_stats(config, curr_date):
                 if category['category'] == 'sog':
                     team_sog = category['homeValue']
                     opp_sog = category['awayValue']
+                elif category['category'] == 'powerPlayPctg':
+                    team_pp = category['homeValue']
+                    opp_pp = category['awayValue']
+                elif category['category'] == 'giveaways':
+                    team_give = category['homeValue']
+                    opp_give = category['awayValue']
+                elif category['category'] == 'takeaways':
+                    team_take = category['homeValue']
+                    opp_take = category['awayValue']
                 elif category['category'] == 'hits':
                     team_hits = category['homeValue']
                     opp_hits = category['awayValue']
@@ -66,6 +81,15 @@ def curate_basic_stats(config, curr_date):
                 if category['category'] == 'sog':
                     team_sog = category['awayValue']
                     opp_sog = category['homeValue']
+                elif category['category'] == 'powerPlayPctg':
+                    team_pp = category['awayValue']
+                    opp_pp = category['homeValue']
+                elif category['category'] == 'giveaways':
+                    team_give = category['awayValue']
+                    opp_give = category['homeValue']
+                elif category['category'] == 'takeaways':
+                    team_take = category['awayValue']
+                    opp_take = category['homeValue']
                 elif category['category'] == 'hits':
                     team_hits = category['awayValue']
                     opp_hits = category['homeValue']
@@ -108,6 +132,12 @@ def curate_basic_stats(config, curr_date):
         o_score.append(opp_score)
         t_sog.append(team_sog)
         o_sog.append(opp_sog)
+        t_pp.append(team_pp)
+        o_pp.append(opp_pp)
+        t_give.append(team_give)
+        o_give.append(opp_give)
+        t_take.append(team_take)
+        o_take.append(opp_take)
         t_hits.append(team_hits)
         o_hits.append(opp_hits)
         t_blocks.append(team_blocks)
@@ -130,6 +160,12 @@ def curate_basic_stats(config, curr_date):
         "opp_score": o_score,
         "team_sog": t_sog,
         "opp_sog": o_sog,
+        "team_pp": t_pp,
+        "opp_pp": o_pp,
+        "team_give": t_give,
+        "opp_give": o_give,
+        "team_take": t_take,
+        "opp_take": o_take,
         "team_hits": t_hits,
         "opp_hits": o_hits,
         "team_blocks": t_blocks,
@@ -189,6 +225,12 @@ def curate_future_games(config, curr_date):
     o_score = []
     t_sog = []
     o_sog = []
+    t_pp = []
+    o_pp = []
+    t_give = []
+    o_give = []
+    t_take = []
+    o_take = []
     t_hits = []
     o_hits = []
     t_blocks = []
@@ -220,6 +262,12 @@ def curate_future_games(config, curr_date):
                 opp_score = None
                 team_sog = None
                 opp_sog = None
+                team_pp = None
+                opp_pp = None
+                team_give = None
+                opp_give = None
+                team_take = None
+                opp_take = None
                 team_hits = None
                 opp_hits = None
                 team_blocks = None
@@ -235,6 +283,15 @@ def curate_future_games(config, curr_date):
                     if category['category'] == 'sog':
                         team_sog = category['homeValue']
                         opp_sog = category['awayValue']
+                    elif category['category'] == 'powerPlayPctg':
+                        team_pp = category['homeValue']
+                        opp_pp = category['awayValue']
+                    elif category['category'] == 'giveaways':
+                        team_give = category['homeValue']
+                        opp_give = category['awayValue']
+                    elif category['category'] == 'takeaways':
+                        team_take = category['homeValue']
+                        opp_take = category['awayValue']
                     elif category['category'] == 'hits':
                         team_hits = category['homeValue']
                         opp_hits = category['awayValue']
@@ -255,6 +312,12 @@ def curate_future_games(config, curr_date):
                 opp_score = None
                 team_sog = None
                 opp_sog = None
+                team_pp = None
+                opp_pp = None
+                team_give = None
+                opp_give = None
+                team_take = None
+                opp_take = None
                 team_hits = None
                 opp_hits = None
                 team_blocks = None
@@ -270,6 +333,15 @@ def curate_future_games(config, curr_date):
                     if category['category'] == 'sog':
                         team_sog = category['awayValue']
                         opp_sog = category['homeValue']
+                    elif category['category'] == 'powerPlayPctg':
+                        team_pp = category['awayValue']
+                        opp_pp = category['homeValue']
+                    elif category['category'] == 'giveaways':
+                        team_give = category['awayValue']
+                        opp_give = category['homeValue']
+                    elif category['category'] == 'takeaways':
+                        team_take = category['awayValue']
+                        opp_take = category['homeValue']
                     elif category['category'] == 'hits':
                         team_hits = category['awayValue']
                         opp_hits = category['homeValue']
@@ -317,6 +389,12 @@ def curate_future_games(config, curr_date):
         o_score.append(opp_score)
         t_sog.append(team_sog)
         o_sog.append(opp_sog)
+        t_pp.append(team_pp)
+        o_pp.append(opp_pp)
+        t_give.append(team_give)
+        o_give.append(opp_give)
+        t_take.append(team_take)
+        o_take.append(opp_take)
         t_hits.append(team_hits)
         o_hits.append(opp_hits)
         t_blocks.append(team_blocks)
@@ -340,6 +418,12 @@ def curate_future_games(config, curr_date):
         "opp_score": o_score,
         "team_sog": t_sog,
         "opp_sog": o_sog,
+        "team_pp": t_pp,
+        "opp_pp": o_pp,
+        "team_give": t_give,
+        "opp_give": o_give,
+        "team_take": t_take,
+        "opp_take": o_take,
         "team_hits": t_hits,
         "opp_hits": o_hits,
         "team_blocks": t_blocks,
