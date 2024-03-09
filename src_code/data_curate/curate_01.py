@@ -231,16 +231,22 @@ def curate_future_games(config, curr_date):
             else:
                 team_score = game[4]["homeTeam"]["score"]
                 opp_score = game[4]["awayTeam"]["score"]
-                team_sog = game[4]["homeTeam"]["sog"]
-                opp_sog = game[4]["awayTeam"]["sog"]
-                team_hits = game[4]["homeTeam"]["hits"]
-                opp_hits = game[4]["awayTeam"]["hits"]
-                team_blocks = game[4]["homeTeam"]["blocks"]
-                opp_blocks = game[4]["awayTeam"]["blocks"]
-                team_pim = game[4]["homeTeam"]["pim"]
-                opp_pim = game[4]["awayTeam"]["pim"]
-                team_face = game[4]["homeTeam"]["faceoffWinningPctg"]
-                opp_face = game[4]["awayTeam"]["faceoffWinningPctg"]
+                for category in game[4]['boxscore']['teamGameStats']:
+                    if category['category'] == 'sog':
+                        team_sog = category['homeValue']
+                        opp_sog = category['awayValue']
+                    elif category['category'] == 'hits':
+                        team_hits = category['homeValue']
+                        opp_hits = category['awayValue']
+                    elif category['category'] == 'blockedShots':
+                        team_blocks = category['homeValue']
+                        opp_blocks = category['awayValue']
+                    elif category['category'] == 'pim':
+                        team_pim = category['homeValue']
+                        opp_pim = category['awayValue']
+                    elif category['category'] == 'faceoffWinningPctg':
+                        team_face = category['homeValue']
+                        opp_face = category['awayValue']
         else:
             home.append(0)
             opp.append(game[4]["homeTeam"]["abbrev"])
@@ -260,16 +266,22 @@ def curate_future_games(config, curr_date):
             else:
                 team_score = game[4]["awayTeam"]["score"]
                 opp_score = game[4]["homeTeam"]["score"]
-                team_sog = game[4]["homeTeam"]["sog"]
-                opp_sog = game[4]["awayTeam"]["sog"]
-                team_hits = game[4]["homeTeam"]["hits"]
-                opp_hits = game[4]["awayTeam"]["hits"]
-                team_blocks = game[4]["homeTeam"]["blocks"]
-                opp_blocks = game[4]["awayTeam"]["blocks"]
-                team_pim = game[4]["homeTeam"]["pim"]
-                opp_pim = game[4]["awayTeam"]["pim"]
-                team_face = game[4]["homeTeam"]["faceoffWinningPctg"]
-                opp_face = game[4]["awayTeam"]["faceoffWinningPctg"]
+                for category in game[4]['boxscore']['teamGameStats']:
+                    if category['category'] == 'sog':
+                        team_sog = category['awayValue']
+                        opp_sog = category['homeValue']
+                    elif category['category'] == 'hits':
+                        team_hits = category['awayValue']
+                        opp_hits = category['homeValue']
+                    elif category['category'] == 'blockedShots':
+                        team_blocks = category['awayValue']
+                        opp_blocks = category['homeValue']
+                    elif category['category'] == 'pim':
+                        team_pim = category['awayValue']
+                        opp_pim = category['homeValue']
+                    elif category['category'] == 'faceoffWinningPctg':
+                        team_face = category['awayValue']
+                        opp_face = category['homeValue']
         if future_game == 1:
             ot.append(None)
             shootout.append(None)

@@ -101,7 +101,7 @@ def curate_rolling_stats(config, curr_date, days):
     feature_team_df = pd.DataFrame({
         "team": team,
         "team_last_game_date": date,
-        f"team_avg_wins": avg_wins,
+        f"team_avg_wins_{days}": avg_wins,
         f"team_avg_goals_for_{days}": avg_goals_for,
         f"team_avg_goals_against_{days}": avg_goals_against,
         f"team_avg_shots_for_{days}": avg_shots_for,
@@ -119,7 +119,7 @@ def curate_rolling_stats(config, curr_date, days):
     feature_opp_df = pd.DataFrame({
         "opp": team,
         "opp_last_game_date": date,
-        f"opp_avg_wins": avg_wins,
+        f"opp_avg_wins_{days}": avg_wins,
         f"opp_avg_goals_for_{days}": avg_goals_for,
         f"opp_avg_goals_against_{days}": avg_goals_against,
         f"opp_avg_shots_for_{days}": avg_shots_for,
