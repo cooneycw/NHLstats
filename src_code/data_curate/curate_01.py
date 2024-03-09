@@ -65,19 +65,19 @@ def curate_basic_stats(config, curr_date):
             for category in game[4]['boxscore']['teamGameStats']:
                 if category['category'] == 'sog':
                     team_sog = category['awayValue']
-                    opp_sog = category['teamValue']
+                    opp_sog = category['homeValue']
                 elif category['category'] == 'hits':
                     team_hits = category['awayValue']
-                    opp_hits = category['teamValue']
+                    opp_hits = category['homeValue']
                 elif category['category'] == 'blockedShots':
                     team_blocks = category['awayValue']
-                    opp_blocks = category['teamValue']
+                    opp_blocks = category['homeValue']
                 elif category['category'] == 'pim':
                     team_pim = category['awayValue']
-                    opp_pim = category['teamValue']
+                    opp_pim = category['homeValue']
                 elif category['category'] == 'faceoffWinningPctg':
                     team_face = category['awayValue']
-                    opp_face = category['teamValue']
+                    opp_face = category['homeValue']
         if game[4]["gameOutcome"]["lastPeriodType"] == "REG":
             ot.append(0)
             shootout.append(0)
