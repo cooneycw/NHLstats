@@ -25,6 +25,29 @@ def get_team_list(config):
     config.set_teams(team_list)
 
 
+async def get_rosters(config):
+    tasks = []
+    async with aiohttp.ClientSession() as session:
+        for team in config.get_teams():
+            url = f"{config.endpoints['roster']}"
+            final_url = url.format(base_url=config.base_url, team=team)
+            task = asyncio.create_task(fetch_roster_data(session, final_url, team))
+            tasks.append(task)
+        roster_list = await asyncio.gather(*tasks)
+    config.set_rosters(roster_list)
+
+
+def get_player_list(config):
+    roster_data = config.get_rosters()
+    player_list = []
+    for team, roster_info in roster_data:
+        for player_type in roster_info.keys():
+            for player in roster_info[player_type]:
+                identity = (team, player['id'], player_type, player['lastName'], player['firstName'])
+                player_list.append(identity)
+    config.set_player_list(player_list)
+
+
 async def get_game_list(config):
     tasks = []
     async with aiohttp.ClientSession() as session:
@@ -50,6 +73,12 @@ async def get_boxscore_list(config):
         results = await asyncio.gather(*tasks)
         boxscore_list.extend(results)
     config.set_boxscores(boxscore_list)
+
+
+async def fetch_roster_data(session, url, team):
+    async with session.get(url) as response:
+        roster_data = await response.json()
+        return (team, roster_data)
 
 
 async def fetch_game_data(session, url, season, team):
