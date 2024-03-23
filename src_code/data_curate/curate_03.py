@@ -63,8 +63,8 @@ def curate_player_stats(config, curr_date):
         game_date = datetime.strptime(t_date, '%Y-%m-%d').date()
         if game_date >= curr_date:
             continue
-        for teamType in data['boxscore']['playerByGameStats'].keys():
-            sub_data = data['boxscore']['playerByGameStats'][teamType]
+        for teamType in data['playerByGameStats'].keys():
+            sub_data = data['playerByGameStats'][teamType]
             for playerType in sub_data.keys():
                 sub_sub_data = sub_data[playerType]
                 for element in sub_sub_data:
@@ -263,8 +263,6 @@ def curate_player_stats(config, curr_date):
 
 def curate_future_player_stats(config, curr_date):
     roster_data = config.get_rosters()
-    boxscore_data = config.get_boxscores()
-    player_data = config.get_player_list()
     curr_date = pd.to_datetime(curr_date)
 
     t_team = []
@@ -316,14 +314,8 @@ def curate_future_player_stats(config, curr_date):
                     t_positionGoalie.append(1)
 
     future_player_df = pd.DataFrame({
-        "playerId": t_player_id,
-        "playerLastName": t_player_lname,
-        "playerFirstName": t_player_fname,
+        "player": t_player_id,
         "team": t_team,
-        "positionCentre": t_positionCentre,
-        "positionRightWing": t_positionRightWing,
-        "positionLeftWing": t_positionLeftWing,
-        "positionDefense": t_positionDefense,
         "positionGoalie": t_positionGoalie,
     })
 
@@ -333,7 +325,7 @@ def curate_future_player_stats(config, curr_date):
     basic_df.rename(columns={'game_id': 'gameId', 'date': 'gameDate'}, inplace=True)
     basic_df['gameDate'] = pd.to_datetime(basic_df['gameDate'])
     basic_df.sort_values(by=['team', 'gameDate'], inplace=True)
-    basic_df = basic_df[basic_df['gameDate'] >= curr_date]
+    basic_df = basic_df[basic_df['gameDate'] == curr_date]
 
     keep_cols = ['team', 'gameDate', 'opp', 'home', 'team_rest', 'opp_rest', 'team_last_game_date',
                  'opp_last_game_date']

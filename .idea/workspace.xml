@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4f418e9f-112e-4073-bf00-fea3362662d4" name="Changes" comment="Creating player database from boxscore.">
-      <change afterPath="$PROJECT_DIR$/src_code/data_curate/curate_04.py" afterDir="false" />
+    <list default="true" id="4f418e9f-112e-4073-bf00-fea3362662d4" name="Changes" comment="Added team data to player dataset.  Commencing analysis.">
+      <change afterPath="$PROJECT_DIR$/src_code/data_analysis/analysis_03.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src_code/data_curate/curate_01.py" beforeDir="false" afterPath="$PROJECT_DIR$/src_code/data_curate/curate_01.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src_code/data_curate/curate_03.py" beforeDir="false" afterPath="$PROJECT_DIR$/src_code/data_curate/curate_03.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src_code/data_curate/curate_04.py" beforeDir="false" afterPath="$PROJECT_DIR$/src_code/data_curate/curate_04.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +43,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
+    "grid.search.filter.rows": "true",
     "last_opened_file_path": "/home/cooneycw/PycharmProjects/NHLstats",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -103,7 +106,7 @@
       <workItem from="1709580915644" duration="13801000" />
       <workItem from="1709606507265" duration="249000" />
       <workItem from="1709606761870" duration="627000" />
-      <workItem from="1710001677837" duration="72181000" />
+      <workItem from="1710001677837" duration="105465000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -169,7 +172,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710083148738</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Added team data to player dataset.  Commencing analysis.">
+      <option name="closed" value="true" />
+      <created>1710702372923</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1710702372923</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -182,9 +193,10 @@
     <MESSAGE value="Modified curate_01 due to changes to NHL API (need to extract boxscore)." />
     <MESSAGE value="Added powerplay, giveaways, takeaways stats.  Logistic regression." />
     <MESSAGE value="Creating player database from boxscore." />
-    <option name="LAST_COMMIT_MESSAGE" value="Creating player database from boxscore." />
+    <MESSAGE value="Added team data to player dataset.  Commencing analysis." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added team data to player dataset.  Commencing analysis." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/NHLstats$main.coverage" NAME="main Coverage Results" MODIFIED="1710702206700" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NHLstats$main.coverage" NAME="main Coverage Results" MODIFIED="1711204823178" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

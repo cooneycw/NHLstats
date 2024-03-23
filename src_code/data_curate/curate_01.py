@@ -47,7 +47,7 @@ def curate_basic_stats(config, curr_date):
             opp.append(game[4]["awayTeam"]["abbrev"])
             team_score = game[4]["homeTeam"]["score"]
             opp_score = game[4]["awayTeam"]["score"]
-            for category in game[4]['boxscore']['teamGameStats']:
+            for category in game[4]['summary']['teamGameStats']:
                 if category['category'] == 'sog':
                     team_sog = category['homeValue']
                     opp_sog = category['awayValue']
@@ -77,7 +77,7 @@ def curate_basic_stats(config, curr_date):
             opp.append(game[4]["homeTeam"]["abbrev"])
             team_score = game[4]["awayTeam"]["score"]
             opp_score = game[4]["homeTeam"]["score"]
-            for category in game[4]['boxscore']['teamGameStats']:
+            for category in game[4]['summary']['teamGameStats']:
                 if category['category'] == 'sog':
                     team_sog = category['awayValue']
                     opp_sog = category['homeValue']
@@ -279,7 +279,7 @@ def curate_future_games(config, curr_date):
             else:
                 team_score = game[4]["homeTeam"]["score"]
                 opp_score = game[4]["awayTeam"]["score"]
-                for category in game[4]['boxscore']['teamGameStats']:
+                for category in game[4]['summary']['teamGameStats']:
                     if category['category'] == 'sog':
                         team_sog = category['homeValue']
                         opp_sog = category['awayValue']
@@ -329,7 +329,7 @@ def curate_future_games(config, curr_date):
             else:
                 team_score = game[4]["awayTeam"]["score"]
                 opp_score = game[4]["homeTeam"]["score"]
-                for category in game[4]['boxscore']['teamGameStats']:
+                for category in game[4]['summary']['teamGameStats']:
                     if category['category'] == 'sog':
                         team_sog = category['awayValue']
                         opp_sog = category['homeValue']
