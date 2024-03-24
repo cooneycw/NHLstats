@@ -9,24 +9,26 @@ from src_code.data_curate.curate_04 import curate_rolling_player_stats, curate_p
 from src_code.data_analysis.analysis_01 import perform_tf, perform_logistic, perform_logistic_goals
 from src_code.data_analysis.analysis_02 import start_h2o
 from src_code.data_analysis.analysis_03 import perform_logistic_player, perform_kmeans_player
+from src_code.data_analysis.analysis_04 import perform_tf_player
 from src_code.utils.utils import save_data, load_data
 
 
 def main():
-    seg_list = [100]
-    days_list = [22]
+    seg_list = [200]
+    days_list = [10, 22]
     goal_test_list = [4, 5, 6]
     seasons = 6
     curr_date = datetime.now().date()
     # curr_date = curr_date - timedelta(days=1)
-    # get_data(seasons)
-    # curate_data_seg(curr_date, seg_list)
+    get_data(seasons)
+    curate_data_seg(curr_date, seg_list)
     perform_kmeans_player()
 
     # curate_data(curr_date, days_list)
     # perform_tf()
     # perform_logistic()
-    # perform_logistic_player()
+    # perform_logistic_player(segs=True)
+    # perform_logistic_goals(segs=True)
 
     # for goal_test in goal_test_list:
     #    perform_logistic_goals(goal_test)

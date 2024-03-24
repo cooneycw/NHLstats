@@ -53,19 +53,23 @@ def curate_rolling_player_stats(config, curr_date, first_days, days):
     p_positionDefense = []
     p_gameDate = []
     p_anyGoals = []
+    p_anyAssists = []
     p_anyPoints = []
     p_anyShots_01p = []
     p_anyShots_02p = []
     p_anyShots_03p = []
     p_anyShots_04p = []
-    p_avg_gameToi = []
+    p_avg_toi = []
     p_avg_gamesPlayed = []
+    p_avg_pim = []
+    p_avg_hits = []
     p_avg_goals = []
     p_avg_anyGoals = []
     p_avg_assists = []
-    p_avg_gamePoints = []
+    p_avg_anyAssists = []
+    p_avg_points = []
     p_avg_anyPoints = []
-    p_avg_gameShots = []
+    p_avg_shots = []
     p_avg_anyShots_01p = []
     p_avg_anyShots_02p = []
     p_avg_anyShots_03p = []
@@ -109,19 +113,23 @@ def curate_rolling_player_stats(config, curr_date, first_days, days):
                     p_gameDate.append(current_game_date)
                     games_played = sum(player_prior_games_df['games_played'])
                     p_anyGoals.append(player_curr_game_df['anyGoals'].iloc[0])
+                    p_anyAssists.append(player_curr_game_df['anyAssists'].iloc[0])
                     p_anyPoints.append(player_curr_game_df['anyPoints'].iloc[0])
                     p_anyShots_01p.append(player_curr_game_df['anyShots_01p'].iloc[0])
                     p_anyShots_02p.append(player_curr_game_df['anyShots_02p'].iloc[0])
                     p_anyShots_03p.append(player_curr_game_df['anyShots_03p'].iloc[0])
                     p_anyShots_04p.append(player_curr_game_df['anyShots_04p'].iloc[0])
-                    p_avg_gameToi.append(sum(player_prior_games_df['gameToi']) / games_played)
+                    p_avg_toi.append(sum(player_prior_games_df['toi']) / games_played)
+                    p_avg_pim.append(sum(player_prior_games_df['pim']) / games_played)
+                    p_avg_hits.append(sum(player_prior_games_df['hits']) / games_played)
                     p_avg_gamesPlayed.append(games_played)
-                    p_avg_goals.append(sum(player_prior_games_df['gameGoals'])/games_played)
+                    p_avg_goals.append(sum(player_prior_games_df['goals'])/games_played)
                     p_avg_anyGoals.append(sum(player_prior_games_df['anyGoals']) / games_played)
-                    p_avg_assists.append(sum(player_prior_games_df['gameAssists']) / games_played)
-                    p_avg_gamePoints.append(sum(player_prior_games_df['gamePoints']) / games_played)
+                    p_avg_assists.append(sum(player_prior_games_df['assists']) / games_played)
+                    p_avg_anyAssists.append(sum(player_prior_games_df['anyAssists']) / games_played)
+                    p_avg_points.append(sum(player_prior_games_df['points']) / games_played)
                     p_avg_anyPoints.append(sum(player_prior_games_df['anyPoints']) / games_played)
-                    p_avg_gameShots.append(sum(player_prior_games_df['gameShots']) / games_played)
+                    p_avg_shots.append(sum(player_prior_games_df['shots']) / games_played)
                     p_avg_anyShots_01p.append(sum(player_prior_games_df['anyShots_01p']) / games_played)
                     p_avg_anyShots_02p.append(sum(player_prior_games_df['anyShots_02p']) / games_played)
                     p_avg_anyShots_03p.append(sum(player_prior_games_df['anyShots_03p']) / games_played)
@@ -140,19 +148,23 @@ def curate_rolling_player_stats(config, curr_date, first_days, days):
         f"positionLeftWing": p_positionLeftWing,
         f"positionDefense": p_positionDefense,
         f"anyGoals": p_anyGoals,
+        f"anyAssists": p_anyAssists,
         f"anyPoints": p_anyPoints,
         f"anyShots_01p": p_anyShots_01p,
         f"anyShots_02p": p_anyShots_02p,
         f"anyShots_03p": p_anyShots_03p,
         f"anyShots_04p": p_anyShots_04p,
         f"avg_gamesPlayed_{days}": p_avg_gamesPlayed,
-        f"avg_gameToi_{days}": p_avg_gameToi,
+        f"avg_toi_{days}": p_avg_toi,
+        f"avg_pim_{days}": p_avg_pim,
+        f"avg_hits_{days}": p_avg_hits,
         f"avg_goals_{days}": p_avg_goals,
         f"avg_anyGoals_{days}": p_avg_anyGoals,
         f"avg_assists_{days}": p_avg_assists,
-        f"avg_gamePoints_{days}": p_avg_gamePoints,
+        f"avg_anyAssists_{days}": p_avg_anyAssists,
+        f"avg_points_{days}": p_avg_points,
         f"avg_anyPoints_{days}": p_avg_anyPoints,
-        f"avg_gameShots_{days}": p_avg_gameShots,
+        f"avg_gameShots_{days}": p_avg_shots,
         f"avg_anyShots_01p_{days}": p_avg_anyShots_01p,
         f"avg_anyShots_02p_{days}": p_avg_anyShots_02p,
         f"avg_anyShots_03p_{days}": p_avg_anyShots_03p,
@@ -163,7 +175,7 @@ def curate_rolling_player_stats(config, curr_date, first_days, days):
         playerFeature_df.drop(columns=['playerLastName', 'playerFirstName',
                                        'positionCentre', 'positionDefense',
                                        'positionRightWing', 'positionLeftWing',
-                                       'anyGoals', 'anyPoints',
+                                       'anyGoals', 'anyAssists', 'anyPoints',
                                        'anyShots_01p',
                                        'anyShots_02p',
                                        'anyShots_03p',
@@ -232,14 +244,17 @@ def curate_proj_player_data(config, curr_date, first_days, days):
     p_positionLeftWing = []
     p_positionDefense = []
     p_gameDate = []
-    p_avg_gameToi = []
+    p_avg_toi = []
+    p_avg_pim = []
+    p_avg_hits = []
     p_avg_gamesPlayed = []
     p_avg_goals = []
     p_avg_anyGoals = []
     p_avg_assists = []
-    p_avg_gamePoints = []
+    p_avg_anyAssists = []
+    p_avg_points = []
     p_avg_anyPoints = []
-    p_avg_gameShots = []
+    p_avg_shots = []
     p_avg_anyShots_01p = []
     p_avg_anyShots_02p = []
     p_avg_anyShots_03p = []
@@ -282,14 +297,17 @@ def curate_proj_player_data(config, curr_date, first_days, days):
                     p_team.append(team)
                     p_gameDate.append(current_game_date)
                     games_played = sum(player_prior_games_df['games_played'])
-                    p_avg_gameToi.append(sum(player_prior_games_df['gameToi']) / games_played)
+                    p_avg_toi.append(sum(player_prior_games_df['gameToi']) / games_played)
+                    p_avg_pim.append(sum(player_prior_games_df['gamePim']) / games_played)
+                    p_avg_hits.append(sum(player_prior_games_df['gameHits']) / games_played)
                     p_avg_gamesPlayed.append(games_played)
                     p_avg_goals.append(sum(player_prior_games_df['gameGoals'])/games_played)
                     p_avg_anyGoals.append(sum(player_prior_games_df['anyGoals']) / games_played)
                     p_avg_assists.append(sum(player_prior_games_df['gameAssists']) / games_played)
-                    p_avg_gamePoints.append(sum(player_prior_games_df['gamePoints']) / games_played)
+                    p_avg_anyAssists.append(sum(player_prior_games_df['anyAssists']) / games_played)
+                    p_avg_points.append(sum(player_prior_games_df['gamePoints']) / games_played)
                     p_avg_anyPoints.append(sum(player_prior_games_df['anyPoints']) / games_played)
-                    p_avg_gameShots.append(sum(player_prior_games_df['gameShots']) / games_played)
+                    p_avg_shots.append(sum(player_prior_games_df['gameShots']) / games_played)
                     p_avg_anyShots_01p.append(sum(player_prior_games_df['anyShots_01p']) / games_played)
                     p_avg_anyShots_02p.append(sum(player_prior_games_df['anyShots_02p']) / games_played)
                     p_avg_anyShots_03p.append(sum(player_prior_games_df['anyShots_03p']) / games_played)
@@ -309,12 +327,14 @@ def curate_proj_player_data(config, curr_date, first_days, days):
         f"positionDefense": p_positionDefense,
         f"avg_gamesPlayed_{days}": p_avg_gamesPlayed,
         f"avg_gameToi_{days}": p_avg_gameToi,
+        f"avg_gamePim_{days}": p_avg_gamePim,
         f"avg_goals_{days}": p_avg_goals,
         f"avg_anyGoals_{days}": p_avg_anyGoals,
         f"avg_assists_{days}": p_avg_assists,
-        f"avg_gamePoints_{days}": p_avg_gamePoints,
+        f"avg_anyAssists_{days}": p_avg_anyAssists,
+        f"avg_gamePoints_{days}": p_avg_points,
         f"avg_anyPoints_{days}": p_avg_anyPoints,
-        f"avg_gameShots_{days}": p_avg_gameShots,
+        f"avg_gameShots_{days}": p_avg_shots,
         f"avg_anyShots_01p_{days}": p_avg_anyShots_01p,
         f"avg_anyShots_02p_{days}": p_avg_anyShots_02p,
         f"avg_anyShots_03p_{days}": p_avg_anyShots_03p,

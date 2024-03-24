@@ -6,10 +6,18 @@ certifi @ file:///croot/certifi_1707229174982/work/certifi
 charset-normalizer @ file:///tmp/build/80754af9/charset-normalizer_1630003229654/work
 datatable==1.1.0
 numpy==1.26.4
-pandas==2.2.1
+pandas~=2.0.3
 python-dateutil==2.8.2
 pytz==2024.1
 setuptools==68.2.2
 six==1.16.0
 tzdata==2024.1
 wheel==0.41.2
+requests~=2.31.0
+aiohttp~=3.9.3
+shap~=0.44.1
+matplotlib~=3.7.5
+scikit-learn~=1.3.2
+xgboost~=2.0.3
+h2o~=3.44.0.3
+statsmodels~=0.14.1

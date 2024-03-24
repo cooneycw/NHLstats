@@ -30,22 +30,23 @@ def curate_player_stats(config, curr_date):
     positionLeftWing = []
     positionDefense = []
     positionGoalie = []
-    gameGoals = []
+    goals = []
     anyGoals = []
-    gameAssists = []
-    gamePoints = []
+    assists = []
+    anyAssists = []
+    points = []
     anyPoints = []
-    gamePlusMinus = []
-    gamePim = []
-    gameHits = []
-    gamePowerPlayGoals = []
-    gameShots = []
+    plusMinus = []
+    pim = []
+    hits = []
+    powerPlayGoals = []
+    shots = []
     anyShots_01p = []
     anyShots_02p = []
     anyShots_03p = []
     anyShots_04p = []
-    gameFaceoffWinningPctg = []
-    gameToi = []
+    faceoffWinningPctg = []
+    toi = []
     gameEvenStrengthShotsAgainst = []
     gamePowerPlayShotsAgainst = []
     gameShorthandedShotsAgainst = []
@@ -124,24 +125,25 @@ def curate_player_stats(config, curr_date):
                         positionDefense.append(0)
                         positionGoalie.append(1)
 
-                    gamePim.append(element['pim'])
+                    pim.append(element['pim'])
                     minutes, seconds = map(int, element['toi'].split(':'))
-                    gameToi.append(round(minutes + (seconds/60), 2))
+                    toi.append(round(minutes + (seconds/60), 2))
                     if element['position'] == 'G':
-                        gameGoals.append(0)
+                        goals.append(0)
                         anyGoals.append(0)
-                        gameAssists.append(0)
-                        gamePoints.append(0)
+                        assists.append(0)
+                        anyAssists.append(0)
+                        points.append(0)
                         anyPoints.append(0)
-                        gamePlusMinus.append(0)
-                        gameHits.append(0)
-                        gamePowerPlayGoals.append(0)
-                        gameShots.append(0)
+                        plusMinus.append(0)
+                        hits.append(0)
+                        powerPlayGoals.append(0)
+                        shots.append(0)
                         anyShots_01p.append(0)
                         anyShots_02p.append(0)
                         anyShots_03p.append(0)
                         anyShots_04p.append(0)
-                        gameFaceoffWinningPctg.append(0)
+                        faceoffWinningPctg.append(0)
                         gameEvenStrengthShotsAgainst.append(element['evenStrengthShotsAgainst'])
                         gamePowerPlayShotsAgainst.append(element['powerPlayShotsAgainst'])
                         gameShorthandedShotsAgainst.append(element['shorthandedShotsAgainst'])
@@ -151,14 +153,14 @@ def curate_player_stats(config, curr_date):
                         gameShorthandedGoalsAgainst.append(element['shorthandedGoalsAgainst'])
                         gameGoalsAgainst.append(element['goalsAgainst'])
                     else:
-                        gameGoals.append(element['goals'])
-                        gameAssists.append(element['assists'])
-                        gamePoints.append(element['points'])
-                        gamePlusMinus.append(element['plusMinus'])
-                        gameHits.append(element['hits'])
-                        gamePowerPlayGoals.append(element['powerPlayGoals'])
-                        gameShots.append(element['shots'])
-                        gameFaceoffWinningPctg.append(element['faceoffWinningPctg'])
+                        goals.append(element['goals'])
+                        assists.append(element['assists'])
+                        points.append(element['points'])
+                        plusMinus.append(element['plusMinus'])
+                        hits.append(element['hits'])
+                        powerPlayGoals.append(element['powerPlayGoals'])
+                        shots.append(element['shots'])
+                        faceoffWinningPctg.append(element['faceoffWinningPctg'])
                         gameEvenStrengthShotsAgainst.append(0)
                         gamePowerPlayShotsAgainst.append(0)
                         gameShorthandedShotsAgainst.append(0)
@@ -167,6 +169,10 @@ def curate_player_stats(config, curr_date):
                         gamePowerPlayGoalsAgainst.append(0)
                         gameShorthandedGoalsAgainst.append(0)
                         gameGoalsAgainst.append(0)
+                        if element['assists'] > 0:
+                            anyAssists.append(1)
+                        else:
+                            anyAssists.append(0)
                         if element['goals'] > 0:
                             anyGoals.append(1)
                         else:
@@ -216,22 +222,23 @@ def curate_player_stats(config, curr_date):
         "positionLeftWing": positionLeftWing,
         "positionDefense": positionDefense,
         "positionGoalie": positionGoalie,
-        "gameGoals": gameGoals,
+        "goals": goals,
         "anyGoals": anyGoals,
-        "gameAssists": gameAssists,
-        "gamePoints": gamePoints,
+        "assists": assists,
+        "anyAssists": anyAssists,
+        "points": points,
         "anyPoints": anyPoints,
-        "gamePlusMinus": gamePlusMinus,
-        "gamePim": gamePim,
-        "gameHits": gameHits,
-        "gamePowerPlayGoals": gamePowerPlayGoals,
-        "gameShots": gameShots,
+        "plusMinus": plusMinus,
+        "pim": pim,
+        "hits": hits,
+        "powerPlayGoals": powerPlayGoals,
+        "shots": shots,
         "anyShots_01p": anyShots_01p,
         "anyShots_02p": anyShots_02p,
         "anyShots_03p": anyShots_03p,
         "anyShots_04p": anyShots_04p,
-        "gameFaceoffWinningPctg": gameFaceoffWinningPctg,
-        "gameToi": gameToi,
+        "faceoffWinningPctg": faceoffWinningPctg,
+        "toi": toi,
         "gameEvenStrengthShotsAgainst": gameEvenStrengthShotsAgainst,
         "gamePowerPlayShotsAgainst": gamePowerPlayShotsAgainst,
         "gameShorthandedShotsAgainst": gameShorthandedShotsAgainst,
