@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import shap
 import tensorflow as tf
 import matplotlib.pyplot as plt
@@ -20,16 +21,17 @@ def perform_tf_player(segs):
         predict_df['cluster'] = predict_df['cluster'].fillna(special_cluster_value)
         analysis_dummies = pd.get_dummies(analysis_df['cluster'], prefix='seg_vals', dtype=int)
         predict_dummies = pd.get_dummies(predict_df['cluster'], prefix='seg_vals', dtype=int)
-        col_names = []
+        model_col_names = []
         for col_name in analysis_dummies.columns:
-            col_names.append(col_name[0:len(col_name)-2])
-        analysis_dummies.columns = col_names
+            model_col_names.append(col_name[0:len(col_name)-2])
+        analysis_dummies.columns = model_col_names
         analysis_df = pd.concat([analysis_df, analysis_dummies], axis=1)
 
         col_names = []
         for col_name in predict_dummies.columns:
             col_names.append(col_name[0:len(col_name)-2])
         predict_dummies.columns = col_names
+        predict_dummies = predict_dummies.reindex(columns=model_col_names, fill_value=0)
         predict_df = pd.concat([predict_df, predict_dummies], axis=1)
 
     columns_to_extract = ['home', 'team_rest', 'opp_rest',
@@ -37,17 +39,27 @@ def perform_tf_player(segs):
                           ]
 
     keyword_columns = ['avg_gamesPlayed_',
-                       'avg_gameToi_',
+                       'avg_toi_',
+                       'avg_pim_',
+                       'avg_hits_',
                        'avg_goals_',
                        'avg_anyGoals_',
                        'avg_assists_',
-                       'avg_gamePoints_',
+                       'avg_anyAssists_',
+                       'avg_points_',
                        'avg_anyPoints_',
-                       'avg_anyShots_02p_10',
-                       'avg_anyShots_03p_10',
-                       'avg_anyShots_04p_10',
+                       'avg_shots_',
+                       'avg_anyShots_01p_',
+                       'avg_anyShots_02p_',
+                       'avg_anyShots_03p_',
+                       'avg_anyShots_04p_',
                        'opp_avg_goals_against_',
                        'opp_avg_shots_against_',
+                       'opp_avg_goals_for_',
+                       'opp_avg_shots_for_',
+                       'opp_avg_hits_for_',
+                       'opp_avg_blocks_for_',
+                       'opp_avg_pim_for_',
                        ]
 
     if segs is True:
@@ -56,10 +68,11 @@ def perform_tf_player(segs):
     for keyword in keyword_columns:
         columns_to_extract.extend(analysis_df.filter(like=keyword).columns.tolist())
 
-    analysis_cols = ['anyGoals', 'anyPoints', 'anyShots_01p', 'anyShots_02p', 'anyShots_03p', 'anyShots_04p']
+    analysis_cols = ['anyGoals', 'anyAssists',  'anyPoints', 'anyShots_01p', 'anyShots_02p', 'anyShots_03p', 'anyShots_04p']
 
+    predictions = []
     for col in analysis_cols:
-        print(f"Columns to extract: {columns_to_extract}")
+        print(f"Modelling: {col} - Columns to extract: {columns_to_extract}")
         # Organize data
         X = analysis_df[columns_to_extract]  # Independent variables
         y = analysis_df[col]
@@ -82,10 +95,15 @@ def perform_tf_player(segs):
         X_test_normalized = scaler.transform(X_test)
         X_pred_normalized = scaler.transform(X_pred)
 
+        shape = X_train_normalized.shape
+        l2_lambda = 0.001
         model = tf.keras.Sequential([
             tf.keras.layers.Input(shape=(X_train_normalized.shape[1],)),
-            tf.keras.layers.Dense(32, activation='relu'),
-            tf.keras.layers.Dropout(0.25),
+            tf.keras.layers.Dense(64, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(l2_lambda)),
+            tf.keras.layers.Dropout(0.6),
+            tf.keras.layers.Dense(32, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(l2_lambda)),
+            tf.keras.layers.Dropout(0.6),
+            tf.keras.layers.BatchNormalization(),
             tf.keras.layers.Dense(1, activation='sigmoid')
             # Output layer with sigmoid activation for binary classification
         ])
@@ -94,62 +112,57 @@ def perform_tf_player(segs):
         model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
         # Train the model
-        history = model.fit(X_train_normalized, y_train, epochs=100, batch_size=32, validation_split=0.2)
+        history = model.fit(X_train_normalized, y_train, epochs=5, batch_size=18, validation_split=0.2)
 
-        explainer = shap.Explainer(model, X_train)
+        # Access training history
+        training_loss = history.history['loss']
+        training_accuracy = history.history['accuracy']
+        validation_loss = history.history['val_loss']
+        validation_accuracy = history.history['val_accuracy']
 
-        # Compute SHAP values
-        shap_values = explainer.shap_values(X_test)
+        # Plot training curves
+        import matplotlib.pyplot as plt
 
-        # Visualize the SHAP values
-        shap.summary_plot(shap_values, X_test, show=False)
-        plt.title(f"{col} - SHAP Summary Plot")
+        epochs = range(1, len(training_loss) + 1)
+
+        plt.plot(epochs, training_loss, 'bo', label='Training loss')
+        plt.plot(epochs, validation_loss, 'b', label='Validation loss')
+        plt.title('Training and validation loss')
+        plt.xlabel('Epochs')
+        plt.ylabel('Loss')
+        plt.legend()
+        plt.show()
+
+        plt.plot(epochs, training_accuracy, 'bo', label='Training accuracy')
+        plt.plot(epochs, validation_accuracy, 'b', label='Validation accuracy')
+        plt.title('Training and validation accuracy')
+        plt.xlabel('Epochs')
+        plt.ylabel('Accuracy')
+        plt.legend()
         plt.show()
 
         loss, accuracy = model.evaluate(X_test_normalized, y_test)
         print("Test Loss:", loss)
         print("Test Accuracy:", accuracy)
-        y_pred = model.predict(X_test_normalized)
         future_pred = model.predict(X_pred_normalized)
 
-        predict_df[f'prediction_{col}'] = None
-        predict_df[f'{col}_over'] = None
-        predict_df[f'{col}_under'] = None
-        for i in range(len(future_pred)):
-            additional_data = predict_df.iloc[X.index[i]]  # Get additional data from analysis_df corresponding to the current row in X_test
-            predict_df.loc[X.index[i], f'prediction_{col}'] = future_pred[i][0]
-            predict_df.loc[X.index[i], f'{col}_over'] = round(100 / future_pred[i][0])
-            predict_df.loc[X.index[i], f'{col}_under'] = round(100 / (1 - future_pred[i][0]))
-            # print(f"Data: {additional_data} \nPredicted:  {future_pred[i][0]}")
+        target_cols = []
+        target_cols.extend(predict_df.filter(like=col).columns.tolist())
 
-        predict_df.to_csv(f"storage/playerFutureStatsData.csv", index=False)
+        prediction_data = {
+            'player': predict_df['player'],  # Assuming 'player' column exists in predict_df
+        }
+        for target_col in target_cols:
+            prediction_data[target_col] = predict_df[target_col]
 
-        # Calculate evaluation metrics
-        accuracy = accuracy_score(y_test, y_pred)
-        precision = precision_score(y_test, y_pred)
-        recall = recall_score(y_test, y_pred)
-        f1 = f1_score(y_test, y_pred)
+        prediction_data[f'prediction_{col}'] = np.round(future_pred[:, 0], 3)
+        prediction_data[f'{col}_over'] = np.round(100 / future_pred[:, 0])
+        prediction_data[f'{col}_under'] = np.round(100 / (1 - future_pred[:, 0]))
 
-        # Calculate ROC curve and AUC
-        fpr, tpr, thresholds = roc_curve(y_test, y_pred[:, 0])
-        roc_auc = roc_auc_score(y_test, y_pred[:, 0])
+        # Append predictions for current column to the list
+        predictions.append(pd.DataFrame(prediction_data))
 
-        # Print performance metrics
-        print(f"{col} Accuracy: {accuracy}")
-        print(f"{col} Precision: {precision}")
-        print(f"{col} Recall: {recall}")
-        print(f"{col} F1-score: {f1}")
-        print(f"{col} AUC: {roc_auc}")
+    predictions_df = pd.concat(predictions, axis=1)
+    final_df = pd.concat([predict_df, predictions_df], axis=1)
 
-        # Plot ROC curve
-
-        plt.figure()
-        plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'{col} ROC curve (area = %0.2f)' % roc_auc)
-        plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title(f'{col} - Receiver Operating Characteristic (ROC) Curve')
-        plt.legend(loc="lower right")
-        plt.show()
+    final_df.to_excel("storage/playerFuturePredTfData.xlsx", index=False)

@@ -20,15 +20,15 @@ def main():
     seasons = 6
     curr_date = datetime.now().date()
     # curr_date = curr_date - timedelta(days=1)
-    get_data(seasons)
-    curate_data_seg(curr_date, seg_list)
-    perform_kmeans_player()
+    # get_data(seasons)
+    # curate_data_seg(curr_date, seg_list)
+    # perform_kmeans_player()
 
     # curate_data(curr_date, days_list)
     # perform_tf()
-    # perform_logistic()
-    # perform_logistic_player(segs=True)
-    # perform_logistic_goals(segs=True)
+    perform_logistic()
+    perform_logistic_player(segs=True)
+    perform_tf_player(segs=True)
 
     # for goal_test in goal_test_list:
     #    perform_logistic_goals(goal_test)

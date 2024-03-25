@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import shap
 import tensorflow as tf
 import matplotlib.pyplot as plt
@@ -24,22 +25,22 @@ def perform_logistic_player(segs):
         predict_df['cluster'] = predict_df['cluster'].fillna(special_cluster_value)
         analysis_dummies = pd.get_dummies(analysis_df['cluster'], prefix='seg_vals', dtype=int)
         predict_dummies = pd.get_dummies(predict_df['cluster'], prefix='seg_vals', dtype=int)
-        col_names = []
+        model_col_names = []
         for col_name in analysis_dummies.columns:
-            col_names.append(col_name[0:len(col_name)-2])
-        analysis_dummies.columns = col_names
+            model_col_names.append(col_name[0:len(col_name)-2])
+        analysis_dummies.columns = model_col_names
         analysis_df = pd.concat([analysis_df, analysis_dummies], axis=1)
 
         col_names = []
         for col_name in predict_dummies.columns:
             col_names.append(col_name[0:len(col_name)-2])
         predict_dummies.columns = col_names
+        predict_dummies = predict_dummies.reindex(columns=model_col_names, fill_value=0)
         predict_df = pd.concat([predict_df, predict_dummies], axis=1)
 
     columns_to_extract = ['home', 'team_rest', 'opp_rest',
                           'positionCentre', 'positionRightWing', 'positionLeftWing', 'positionDefense',
                           ]
-
     keyword_columns = ['avg_gamesPlayed_',
                        'avg_toi_',
                        'avg_pim_',
@@ -47,6 +48,7 @@ def perform_logistic_player(segs):
                        'avg_goals_',
                        'avg_anyGoals_',
                        'avg_assists_',
+                       'avg_anyAssists_',
                        'avg_points_',
                        'avg_anyPoints_',
                        'avg_shots_',
@@ -56,6 +58,11 @@ def perform_logistic_player(segs):
                        'avg_anyShots_04p_10',
                        'opp_avg_goals_against_',
                        'opp_avg_shots_against_',
+                       'opp_avg_goals_for_',
+                       'opp_avg_shots_for_',
+                       'opp_avg_hits_for_',
+                       'opp_avg_blocks_for_',
+                       'opp_avg_pim_for_',
                        ]
 
     if segs is True:
@@ -64,8 +71,9 @@ def perform_logistic_player(segs):
     for keyword in keyword_columns:
         columns_to_extract.extend(analysis_df.filter(like=keyword).columns.tolist())
 
-    analysis_cols = ['anyGoals', 'anyPoints', 'anyAssists', 'anyShots_01p', 'anyShots_02p', 'anyShots_03p', 'anyShots_04p']
+    analysis_cols = ['anyGoals', 'anyAssists',  'anyPoints', 'anyShots_01p', 'anyShots_02p', 'anyShots_03p', 'anyShots_04p']
 
+    predictions = []
     for col in analysis_cols:
         print(f"Columns to extract: {columns_to_extract}")
         # Organize data
@@ -120,17 +128,15 @@ def perform_logistic_player(segs):
         # Extract probabilities of positive class (class 1)
         positive_class_proba = future_pred_proba[:, 1]
 
-        predict_df[f'prediction_{col}'] = None
-        predict_df[f'{col}_over'] = None
-        predict_df[f'{col}_under'] = None
-        for i in range(len(future_pred)):
-            additional_data = predict_df.iloc[X.index[i]]  # Get additional data from analysis_df corresponding to the current row in X_test
-            predict_df.loc[X.index[i], f'prediction_{col}'] = positive_class_proba[i]
-            predict_df.loc[X.index[i], f'{col}_over'] = round(100 / positive_class_proba[i])
-            predict_df.loc[X.index[i], f'{col}_under'] = round(100 / (1 - positive_class_proba[i]))
-            # print(f"Data: {additional_data} \nPredicted:  {future_pred[i][0]}")
+        prediction_data = {
+            'player': predict_df['player'],  # Assuming 'player' column exists in predict_df
+            f'prediction_{col}': positive_class_proba,
+            f'{col}_over': np.round(100 / positive_class_proba),
+            f'{col}_under': np.round(100 / (1 - positive_class_proba))
+        }
 
-        predict_df.to_csv(f"storage/playerFutureStatsData.csv", index=False)
+        # Append predictions for current column to the list
+        predictions.append(pd.DataFrame(prediction_data))
 
         # Calculate evaluation metrics
         accuracy = accuracy_score(y_test, y_pred)
@@ -162,6 +168,11 @@ def perform_logistic_player(segs):
         plt.title(f'{col} - Receiver Operating Characteristic (ROC) Curve')
         plt.legend(loc="lower right")
         plt.show()
+
+    predictions_df = pd.concat(predictions, axis=1)
+    final_df = pd.concat([predict_df, predictions_df], axis=1)
+
+    final_df.to_excel("storage/playerFuturePredLgData.xlsx", index=False)
 
 
 def perform_kmeans_player():
@@ -217,7 +228,7 @@ def perform_kmeans_player():
     plt.show()
 
     # Choose the optimal number of clusters (K)
-    optimal_k = 11  # Example: You need to choose based on the elbow method plot
+    optimal_k = 13  # Example: You need to choose based on the elbow method plot
 
     # Perform K-means clustering with optimal K
     kmeans = KMeans(n_clusters=optimal_k, init='k-means++', random_state=42, n_init=20)
