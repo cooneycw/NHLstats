@@ -2,6 +2,7 @@ import asyncio
 from datetime import datetime, timedelta
 from config.config import Config
 from src_code.data_collect.collect_01 import get_season_data, get_team_list, get_game_list, get_boxscore_list, get_rosters, get_player_list
+from src_code.data_collect.collect_02 import get_lines
 from src_code.data_curate.curate_01 import curate_basic_stats, curate_future_games
 from src_code.data_curate.curate_02 import curate_rolling_stats, curate_proj_data
 from src_code.data_curate.curate_03 import curate_player_stats, curate_future_player_stats
@@ -16,27 +17,22 @@ from src_code.utils.utils import save_data, load_data
 def main():
     seg_list = [200]
     days_list = [10, 22]
-    goal_test_list = [4, 5, 6]
     seasons = 6
     curr_date = datetime.now().date()
-    # curr_date = curr_date - timedelta(days=1)
-    # get_data(seasons)
-    # curate_data_seg(curr_date, seg_list)
-    # perform_kmeans_player()
+    config = Config(seasons)
+    # get_data(config)
+    get_lines(config)
+    curate_data_seg(curr_date, seg_list)
+    perform_kmeans_player()
 
-    # curate_data(curr_date, days_list)
-    # perform_tf()
-    perform_logistic()
-    perform_logistic_player(segs=True)
+    curate_data(curr_date, days_list)
+    perform_tf()
+    # perform_logistic()
+    # perform_logistic_player(segs=True)
     perform_tf_player(segs=True)
 
-    # for goal_test in goal_test_list:
-    #    perform_logistic_goals(goal_test)
-    # start_h2o()
 
-
-def get_data(seasons):
-    config = Config(seasons)
+def get_data(config):
     get_season_data(config)
     get_team_list(config)
     asyncio.run(get_game_list(config))

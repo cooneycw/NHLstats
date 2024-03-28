@@ -121,8 +121,6 @@ def perform_tf_player(segs):
         validation_accuracy = history.history['val_accuracy']
 
         # Plot training curves
-        import matplotlib.pyplot as plt
-
         epochs = range(1, len(training_loss) + 1)
 
         plt.plot(epochs, training_loss, 'bo', label='Training loss')
@@ -153,9 +151,9 @@ def perform_tf_player(segs):
             'player': predict_df['player'],  # Assuming 'player' column exists in predict_df
         }
         for target_col in target_cols:
-            prediction_data[target_col] = predict_df[target_col]
+            prediction_data[target_col] = np.round(100 * predict_df[target_col], 1)
 
-        prediction_data[f'prediction_{col}'] = np.round(future_pred[:, 0], 3)
+        prediction_data[f'prediction_{col}'] = np.round(100 * future_pred[:, 0], 1)
         prediction_data[f'{col}_over'] = np.round(100 / future_pred[:, 0])
         prediction_data[f'{col}_under'] = np.round(100 / (1 - future_pred[:, 0]))
 
