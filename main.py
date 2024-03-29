@@ -20,7 +20,7 @@ def main():
     seasons = 6
     curr_date = datetime.now().date()
     config = Config(seasons)
-    # get_data(config)
+    get_data(config)
     get_lines(config)
     curate_data_seg(curr_date, seg_list)
     perform_kmeans_player()

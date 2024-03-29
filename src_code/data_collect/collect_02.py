@@ -47,6 +47,8 @@ def get_lines(config):
     playerTime = []
     playerInd = []
     playerLine = []
+    playerPower = []
+    playerPK = []
     playerLastName = []
     playerFirstName = []
     positionCentre = []
@@ -56,6 +58,20 @@ def get_lines(config):
     positionGoalie = []
 
     for team in teams:
+        teamPlayerTeam = []
+        teamPlayerTime = []
+        teamPlayerInd = []
+        teamPlayerLine = []
+        teamPlayerPower = []
+        teamPlayerPK = []
+        teamPlayerLastName = []
+        teamPlayerFirstName = []
+        teamPositionCentre = []
+        teamPositionRightWing = []
+        teamPositionLeftWing = []
+        teamPositionDefense = []
+        teamPositionGoalie = []
+
         final_url = url.format(base_url_lines=config.base_url_lines, line_team=team[1])
         response = requests.get(final_url, headers=config.headers_lines)
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -71,37 +87,39 @@ def get_lines(config):
 
         forwards_span = soup.find('span', id='forwards', class_='text-3xl text-white')
         images_after_forwards = forwards_span.find_all_next('img')
-        line = 0
+        line = 1
         for i, image in enumerate(images_after_forwards):
             if i > 11:
                 break
             else:
                 player_name = image['alt']
                 p_FirstName, p_LastName = player_name.split(maxsplit=1)
-                playerTeam.append(team[0])
-                playerTime.append(updated_time)
-                playerInd.append(i)
-                playerLastName.append(p_LastName)
-                playerFirstName.append(p_FirstName)
-                playerLine.append(line)
+                teamPlayerTeam.append(team[0])
+                teamPlayerTime.append(updated_time)
+                teamPlayerInd.append(i)
+                teamPlayerLastName.append(p_LastName)
+                teamPlayerFirstName.append(p_FirstName)
+                teamPlayerLine.append(line)
+                teamPlayerPower.append(0)
+                teamPlayerPK.append(0)
             if i % 3 == 0 and i <= 11:
-                positionCentre.append(0)
-                positionRightWing.append(0)
-                positionLeftWing.append(1)
-                positionDefense.append(0)
-                positionGoalie.append(0)
+                teamPositionCentre.append(0)
+                teamPositionRightWing.append(0)
+                teamPositionLeftWing.append(1)
+                teamPositionDefense.append(0)
+                teamPositionGoalie.append(0)
             elif i % 3 == 1 and i <= 11:
-                positionCentre.append(1)
-                positionRightWing.append(0)
-                positionLeftWing.append(0)
-                positionDefense.append(0)
-                positionGoalie.append(0)
+                teamPositionCentre.append(1)
+                teamPositionRightWing.append(0)
+                teamPositionLeftWing.append(0)
+                teamPositionDefense.append(0)
+                teamPositionGoalie.append(0)
             elif i % 3 == 2 and i <= 11:
-                positionCentre.append(0)
-                positionRightWing.append(1)
-                positionLeftWing.append(0)
-                positionDefense.append(0)
-                positionGoalie.append(0)
+                teamPositionCentre.append(0)
+                teamPositionRightWing.append(1)
+                teamPositionLeftWing.append(0)
+                teamPositionDefense.append(0)
+                teamPositionGoalie.append(0)
                 line += 1
 
         defense_span = soup.find('span', id='defense', class_='text-3xl text-white')
@@ -113,42 +131,93 @@ def get_lines(config):
             else:
                 player_name = image['alt']
                 p_FirstName, p_LastName = player_name.split(maxsplit=1)
-                playerTeam.append(team[0])
-                playerTime.append(updated_time)
-                playerInd.append(i+12)
-                playerLastName.append(p_LastName)
-                playerFirstName.append(p_FirstName)
-                playerLine.append(line)
-                positionCentre.append(0)
-                positionRightWing.append(0)
-                positionLeftWing.append(0)
-                positionDefense.append(1)
-                positionGoalie.append(0)
+                teamPlayerTeam.append(team[0])
+                teamPlayerTime.append(updated_time)
+                teamPlayerInd.append(i+12)
+                teamPlayerLastName.append(p_LastName)
+                teamPlayerFirstName.append(p_FirstName)
+                teamPlayerLine.append(line)
+                teamPlayerPower.append(0)
+                teamPlayerPK.append(0)
+                teamPositionCentre.append(0)
+                teamPositionRightWing.append(0)
+                teamPositionLeftWing.append(0)
+                teamPositionDefense.append(1)
+                teamPositionGoalie.append(0)
                 if i % 2 == 1:
                     line += 1
 
         goalie_span = soup.find('span', id='goalies', class_='text-3xl text-white')
         images_after_goalie = goalie_span.find_all_next('img')
 
-        line = 0
+        line = 1
         for i, image in enumerate(images_after_goalie):
             if i > 1:
                 break
             else:
                 player_name = image['alt']
                 p_FirstName, p_LastName = player_name.split(maxsplit=1)
-                playerTeam.append(team[0])
-                playerTime.append(updated_time)
-                playerInd.append(i+18)
-                playerLastName.append(p_LastName)
-                playerFirstName.append(p_FirstName)
-                playerLine.append(line)
-                positionCentre.append(0)
-                positionRightWing.append(0)
-                positionLeftWing.append(0)
-                positionDefense.append(0)
-                positionGoalie.append(1)
+                teamPlayerTeam.append(team[0])
+                teamPlayerTime.append(updated_time)
+                teamPlayerInd.append(i+18)
+                teamPlayerLastName.append(p_LastName)
+                teamPlayerFirstName.append(p_FirstName)
+                teamPlayerLine.append(line)
+                teamPlayerPower.append(0)
+                teamPlayerPK.append(0)
+                teamPositionCentre.append(0)
+                teamPositionRightWing.append(0)
+                teamPositionLeftWing.append(0)
+                teamPositionDefense.append(0)
+                teamPositionGoalie.append(1)
                 line += 1
+
+        powerplay_span = soup.find('span', id='powerplay', class_='text-3xl text-white')
+        images_after_powerplay = powerplay_span.find_all_next('img')
+
+        power_line = 1
+        pk_line = 1
+        for i, image in enumerate(images_after_powerplay):
+            if i > 17:
+                break
+
+            player_name = image['alt']
+            p_FirstName, p_LastName = player_name.split(maxsplit=1)
+            matching_indices = [index for index, (first_name, last_name) in
+                                enumerate(zip(teamPlayerFirstName, teamPlayerLastName)) if
+                                first_name == p_FirstName and last_name == p_LastName]
+            if len(matching_indices) > 1:
+                raise ValueError("two player names matching...should only be one")
+            else:
+                if i < 10:
+                    if len(matching_indices) == 0:
+                        pass
+                    else:
+                        teamPlayerPower[matching_indices[0]] = power_line
+                    if (i+1) % 5 == 0:
+                        power_line += 1
+                else:
+                    if len(matching_indices) == 0:
+                        pass
+                    else:
+                        teamPlayerPK[matching_indices[0]] = pk_line
+
+                    if ((i + 1) - 10) % 4 == 0:
+                        pk_line += 1
+
+        playerTeam.extend(teamPlayerTeam)
+        playerTime.extend(teamPlayerTime)
+        playerInd.extend(teamPlayerInd)
+        playerLastName.extend(teamPlayerLastName)
+        playerFirstName.extend(teamPlayerFirstName)
+        playerLine.extend(teamPlayerLine)
+        playerPower.extend(teamPlayerPower)
+        playerPK.extend(teamPlayerPK)
+        positionCentre.extend(teamPositionCentre)
+        positionRightWing.extend(teamPositionCentre)
+        positionLeftWing.extend(teamPositionLeftWing)
+        positionDefense.extend(teamPositionDefense)
+        positionGoalie.extend(teamPositionGoalie)
 
         time.sleep(random.uniform(8, 35))
 
@@ -159,9 +228,11 @@ def get_lines(config):
         "team": playerTeam,
         "updateTime": playerTime,
         "playerInd": playerInd,
-        "playerLine": playerLine,
         "playerLastName": playerLastName,
         "playerFirstName": playerFirstName,
+        "playerLine": playerLine,
+        "playerPower": playerPower,
+        "playerPK": playerPK,
         "positionCentre": positionCentre,
         "positionRightWing": positionRightWing,
         "positionLeftWing": positionLeftWing,
